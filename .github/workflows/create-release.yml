@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - master
 
 name: Create and Update Latest Release
 
@@ -12,9 +12,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build project # This would actually build your project, using zip for an example artifact
-        run: |
-          zip --junk-paths my-artifact README.md
+      - run: sudo apt-get install gcc-arm-none-eabi binutils-arm-none-eabi
+      - run: make
+      - run: cp build/*.bin build/tastm32.bin
+      - run: cp build/*.hex build/tastm32.hex
       - name: Create Latest Release
         id: create_release
         uses: GongT/actions-recreate-release@v1
@@ -26,13 +27,23 @@ jobs:
           body: Auto build from ${{ github.sha }} (master)
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
+      - name: Upload Bin Release Asset
+        id: upload-release-asset-bin
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
-          asset_content_type: application/zip
+          asset_path: ./build/tastm32.bin
+          asset_name: tastm32.bin
+          asset_content_type: application/octet-stream
+      - name: Upload Hex Release Asset
+        id: upload-release-asset-hex
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./build/tastm32.hex
+          asset_name: tastm32.hex
+          asset_content_type: application/octet-stream
