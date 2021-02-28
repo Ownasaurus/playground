@@ -3,7 +3,7 @@ on:
     branches:
       - main
 
-name: Create Release
+name: Create and Update Latest Release
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths my-artifact README.md
-      - name: Create Release
+      - name: Create Latest Release
         id: create_release
         uses: GongT/actions-recreate-release@v1
         env:
