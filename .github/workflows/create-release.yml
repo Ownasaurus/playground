@@ -24,7 +24,8 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Compiled Firmware for ${{ github.ref }}
-          body: Please see the assets below.
+          body: |
+            Please see the assets below.
           draft: false
           prerelease: false
       - name: Upload Release Asset
