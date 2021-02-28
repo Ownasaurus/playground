@@ -2,6 +2,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 name: Create Release
 
@@ -23,8 +26,7 @@ jobs:
         with:
           tag_name: latest
           release_name: Latest Compiled Firmware
-          body: |
-            Please see the assets below.
+          body: Auto build from ${{ github.sha }} (master)
           draft: false
           prerelease: false
       - name: Upload Release Asset
