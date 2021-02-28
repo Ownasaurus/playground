@@ -15,12 +15,12 @@ jobs:
       - name: Checkout TAStm32GUI code and merge into our python folder
         run: |
           git clone https://github.com/Zayitskin/TAStm32GUI/
-          cp TAStm32GUI/hook.py /python/
-          cp TAStm32GUI/main.py /python/
-          cp TAStm32GUI/tasfile.py /python/
-          cp TAStm32GUI/widgets.py /python/
+          cp TAStm32GUI/hook.py python/
+          cp TAStm32GUI/main.py python/
+          cp TAStm32GUI/tasfile.py python/
+          cp TAStm32GUI/widgets.py python/
       - name: Create Python Asset
-        run: zip python.zip /python/*
+        run: zip python.zip python/*
       - name: Create Latest Release
         id: create_release
         uses: GongT/actions-recreate-release@v1
